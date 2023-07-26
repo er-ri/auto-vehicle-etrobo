@@ -27,6 +27,7 @@ while True :
         raw = serial.read(1000)
         
         speed = 0
+        angle = 0
         if len(raw) != 0:
             raw = str(raw.decode("UTF-8"))
             parameters = json.loads(raw)

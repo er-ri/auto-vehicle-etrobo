@@ -1,51 +1,60 @@
-import cv2
-import keyboard
-import requests
+"""Script using to retmotely control the vehicle.
+"""
+
 import time
 import json
-import random
+import socketio
+import keyboard
 
+sio = socketio.Client()
 
-while True:
-    if keyboard.is_pressed("up"):
-        print("You pressed 'up'.")
-        parameters = {
-            "angle": 0.5,
-            "speed": 100
-        }
-        response=requests.post("http://192.168.100.22:5000/cmd", json=json.dumps(parameters))
-    elif keyboard.is_pressed("left"):
-        print("You pressed 'left'.")
-        parameters = {
-            "angle": 0.8,
-            "speed": 100
-        }
-        response=requests.post("http://192.168.100.22:5000/cmd", json=json.dumps(parameters))
-    elif keyboard.is_pressed("right"):
-        print("You pressed 'right'.")
-        parameters = {
-            "angle": 0.2,
-            "speed": 100
-        }
-        response=requests.post("http://192.168.100.22:5000/cmd", json=json.dumps(parameters))
-    elif keyboard.is_pressed("down"):
-        print("You pressed 'down'.")
-        parameters = {
-            "angle": 0.5,
-            "speed": -100
-        }
-        response=requests.post("http://192.168.100.22:5000/cmd", json=json.dumps(parameters))
-    elif keyboard.is_pressed("esc"):
-        print("You pressed 'esc'.")
-        break
+# Varaiable Definition
+VEHICLE_IPADDRESS = "192.168.100.22"
+speed = 60
 
-    # Save camera data
-    # cap = cv2.VideoCapture('http://192.168.100.22:5000/video_feed')
-    # cap.grab()
+@sio.event
+def connect():
+    print('Connected to server')
 
-    # success, frame = cap.read()
-    # cv2.imwrite("{}.jpg".format(str(random.randrange(10000))), frame)
+if __name__ == '__main__':
+    sio.connect('http://{}:5000'.format(VEHICLE_IPADDRESS))
 
-    time.sleep(0.1)
+    while True:
+        if keyboard.is_pressed("up"):
+            parameters = {
+                "angle": 0,
+                "speed": speed
+            }
+            sio.emit('json', json.dumps(parameters))
+            time.sleep(0.1)
 
+        elif keyboard.is_pressed("left"):
+            parameters = {
+                "angle": 0.8,
+                "speed": speed
+            }
+            sio.emit('json', json.dumps(parameters))
+            time.sleep(0.1)
+
+        elif keyboard.is_pressed("right"):
+            parameters = {
+                "angle": 0.2,
+                "speed": speed
+            }
+            sio.emit('json', json.dumps(parameters))
+            time.sleep(0.1)
+        
+        elif keyboard.is_pressed("down"):
+            parameters = {
+                "angle": 0,
+                "speed": -speed
+            }
+            sio.emit('json', json.dumps(parameters))
+            time.sleep(0.1)
+
+        elif keyboard.is_pressed("esc"):
+            print("Quit.")
+            break
     
+    sio.disconnect()
+        

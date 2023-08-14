@@ -16,3 +16,7 @@ Distributed under the MIT License. See `LICENSE` for more information.
     * https://docs.micropython.org/en/latest/reference/pyboard.py.html#running-a-command-on-the-device
 2. Install OpenCV on your Raspberry Pi
     * https://raspberrypi-guide.github.io/programming/install-opencv
+3. Balena Etcher
+    * https://www.balena.io/
+4. Getting Started with Raspberry Pi Build HAT
+    * https://datasheets.raspberrypi.com/build-hat/getting-started-build-hat.pdf

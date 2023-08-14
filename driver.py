@@ -30,7 +30,7 @@ if __name__ == '__main__':
 
         elif keyboard.is_pressed("left"):
             parameters = {
-                "angle": 0.8,
+                "angle": -0.2,
                 "speed": speed
             }
             sio.emit('json', json.dumps(parameters))

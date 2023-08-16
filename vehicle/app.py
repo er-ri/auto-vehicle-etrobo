@@ -7,31 +7,20 @@ import json
 from flask import Flask
 from flask_socketio import SocketIO
 
-from buildhat import MotorPair, ColorSensor
+from buildhat import MotorPair
 
 app = Flask(__name__)
 socketio = SocketIO(app)
 
 pair = MotorPair('A', 'B')
-dist = ColorSensor('C')
 
 @socketio.on('json')
 def handle_json(command):
     parameters = json.loads(command)
-    speed = parameters["speed"]
-    angle = parameters["angle"]
+    speedr = parameters["speedr"]
+    speedl = parameters["speedl"]
 
-    if angle == 0:
-        speedl = speed
-        speedr = speed
-    elif angle < 0:
-        speedl = speed * (1+angle)
-        speedr = speed
-    elif angle > 0:
-        speedl = speed
-        speedr = (speed * (1-angle))  
-
-    pair.start(speedl=-speedl, speedr=speedr)
+    pair.start(speedl=speedl, speedr=speedr)
 
 if __name__ == "__main__":
     socketio.run(app)
